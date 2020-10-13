@@ -1,20 +1,45 @@
-//Load HTTP module
-const http = require("http");
-const hostname = 'aritasapi2.azurewebsites.net';
-const port = 3000;
+import express from 'express';
+import bodyParser from 'body-parser';
 
-//Create HTTP server and listen on port 3000 for requests
-const server = http.createServer((req, res) => {
+const articlesInfo = {
+    'learn-react': {
+        upvotes: 0,
+        comments: [],
+    },
+    'learn-node': {
+        upvotes: 0,
+        comments: [],
+    },
+    'my-thoughts-on-resumes': {
+        upvotes: 0,
+        comments: [],
+    },
+}
 
-  //Set the response HTTP header with HTTP status and Content type
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World\n');
-});
+const app = express();
 
-//listen for request on port 3000, and as a callback function have the port listened on logged
-server.listen(process.env.PORT || port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/  ${process.env.PORT}`);
-  var port2 = server.address().port;
-  console.log("App now running on port", port2);
-});
+app.use(bodyParser.json());
+
+app.post('/api/articles/:name/upvote', (req, res) =>{
+    const articleName = req.params.name;
+    articlesInfo[articleName].upvotes += 1;
+    res.status(200).send(`${articleName} now has ${articlesInfo[articleName].upvotes} upvotes`)
+})
+
+app.post('/api/articles/:name/add-comment', (req, res) =>{
+    const {username, text}= req.body;
+    const articleName = req.params.name;
+    articlesInfo[articleName].comments.push({username, text});
+    res.status(200).send(articlesInfo[articleName]);
+})
+
+app.get('/hello',(req, res) => res.send('Hello'));
+app.get('/hello/:name', (req, res) => res.send(`Hello ${req.params.name}`));
+app.post('/hello',(req, res) => res.send(`Hello ${req.body.name}`));
+
+console.log("App now running on port", process.env.port);
+var portNumber = process.env.port || process.env.PORT || 8000;
+app.listen(portNumber, () => console.log('Listening on port ' + portNumber));
+//app.listen(8000, () => console.log('Listening on port 8000'));
+
+//var port2 = server.address().port;
