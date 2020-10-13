@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon --exec npx babel-node src/server.js"
+    "start": "npx nodemon --exec npx babel-node server.js"
   },
   "engines": {
-    "node": "10.14.0",
+    "node": "10.19.0",
     "npm": "6.13.4"
   },
   "keywords": [],
