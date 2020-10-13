@@ -8,8 +8,8 @@
     "start": "npx nodemon --exec npx babel-node src/server.js"
   },
   "engines": {
-    "node":"10.19.0",
-    "npm":"6.13.4"
+    "node": "10.14.0",
+    "npm": "6.13.4"
   },
   "keywords": [],
   "author": "",

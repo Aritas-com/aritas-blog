@@ -1,42 +1,18 @@
-import express from 'express';
-import bodyParser from 'body-parser';
+//Load HTTP module
+const http = require("http");
+const hostname = '127.0.0.1';
+const port = 3000;
 
-const articlesInfo = {
-    'learn-react': {
-        upvotes: 0,
-        comments: [],
-    },
-    'learn-node': {
-        upvotes: 0,
-        comments: [],
-    },
-    'my-thoughts-on-resumes': {
-        upvotes: 0,
-        comments: [],
-    },
-}
+//Create HTTP server and listen on port 3000 for requests
+const server = http.createServer((req, res) => {
 
-const app = express();
+  //Set the response HTTP header with HTTP status and Content type
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  res.end('Hello World\n');
+});
 
-app.use(bodyParser.json());
-
-app.post('/api/articles/:name/upvote', (req, res) =>{
-    const articleName = req.params.name;
-    articlesInfo[articleName].upvotes += 1;
-    res.status(200).send(`${articleName} now has ${articlesInfo[articleName].upvotes} upvotes`)
-})
-
-app.post('/api/articles/:name/add-comment', (req, res) =>{
-    const {username, text}= req.body;
-    const articleName = req.params.name;
-    articlesInfo[articleName].comments.push({username, text});
-    res.status(200).send(articlesInfo[articleName]);
-})
-
-app.get('/hello',(req, res) => res.send('Hello'));
-app.get('/hello/:name', (req, res) => res.send(`Hello ${req.params.name}`));
-app.post('/hello',(req, res) => res.send(`Hello ${req.body.name}`));
-
-var portNumber = process.env.port || process.env.PORT || 8000;
-app.listen(portNumber, () => console.log('Listening on port ' + portNumber));
-//app.listen(8000, () => console.log('Listening on port 8000'));
+//listen for request on port 3000, and as a callback function have the port listened on logged
+server.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
+});
